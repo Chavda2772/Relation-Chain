@@ -1,10 +1,10 @@
-import { Stage, Layer } from "react-konva";
 import { useState, useRef } from "react";
-import Node from "./Node"; // modular node
+import { Stage, Layer } from "react-konva";
+import Node from "./Node";
 
 const initialNodes = [
-    { id: 1, x: 100, y: 100, label: "Node A" },
-    { id: 2, x: 300, y: 250, label: "Node B" },
+    { id: 1, x: 100, y: 100, label: "Node A", width: 150, height: 70 },
+    { id: 2, x: 300, y: 250, label: "Node B", width: 150, height: 70 },
 ];
 
 const NodeCanvasPage = () => {
@@ -12,6 +12,7 @@ const NodeCanvasPage = () => {
     const [nodes, setNodes] = useState(initialNodes);
     const [scale, setScale] = useState(1);
     const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [selectedId, setSelectedId] = useState(null);
     const [isDraggingNode, setIsDraggingNode] = useState(false);
 
     const MIN_SCALE = 0.5;
@@ -43,15 +44,21 @@ const NodeCanvasPage = () => {
 
     const handleNodeDragStart = () => setIsDraggingNode(true);
 
-    const handleStageDblClick = (e) => {
+    const handleNodeDragEnd = (id, pos) => {
+        setNodes((prev) => prev.map((node) => (node.id === id ? { ...node, ...pos } : node)));
+        setIsDraggingNode(false);
+    };
+
+    const handleResize = (id, size) => {
+        setNodes((prev) =>
+            prev.map((node) => (node.id === id ? { ...node, ...size } : node))
+        );
+    };
+
+    const handleStageDblClick = () => {
         const stage = stageRef.current;
-
-        // Get the pointer position (in screen coords)
         const pointer = stage.getPointerPosition();
-
-        // Convert to canvas coordinates considering zoom and pan
-        const transform = stage.getAbsoluteTransform().copy();
-        transform.invert(); // invert to go from screen to canvas space
+        const transform = stage.getAbsoluteTransform().copy().invert();
         const canvasPos = transform.point(pointer);
 
         const newNode = {
@@ -59,17 +66,11 @@ const NodeCanvasPage = () => {
             x: canvasPos.x,
             y: canvasPos.y,
             label: `Node ${nodes.length + 1}`,
+            width: 150,
+            height: 70,
         };
 
         setNodes((prev) => [...prev, newNode]);
-    };
-
-
-    const handleNodeDragEnd = (id, pos) => {
-        setNodes((prev) =>
-            prev.map((node) => (node.id === id ? { ...node, ...pos } : node))
-        );
-        setIsDraggingNode(false);
     };
 
     return (
@@ -85,8 +86,14 @@ const NodeCanvasPage = () => {
                 draggable={!isDraggingNode}
                 onWheel={handleWheel}
                 onDblClick={handleStageDblClick}
+                onMouseDown={(e) => {
+                    if (e.target === e.target.getStage()) {
+                        setSelectedId(null); // Deselect when clicking empty canvas
+                    }
+                }}
                 style={{ backgroundColor: "#f5f5f5", cursor: "grab" }}
             >
+                {/* Nodes */}
                 <Layer>
                     {nodes.map((node) => (
                         <Node
@@ -95,8 +102,14 @@ const NodeCanvasPage = () => {
                             x={node.x}
                             y={node.y}
                             label={node.label}
-                            onDragEnd={handleNodeDragEnd}
+                            width={node.width}
+                            height={node.height}
+                            isSelected={selectedId === node.id}
+                            onSelect={() => setSelectedId(node.id)}
                             onDragStart={handleNodeDragStart}
+                            onDragEnd={handleNodeDragEnd}
+                            onResize={handleResize}
+                            scale={scale}
                         />
                     ))}
                 </Layer>
