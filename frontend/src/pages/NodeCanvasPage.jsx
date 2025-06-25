@@ -10,21 +10,46 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
-import CustomNode from '@/components/CustomNode.jsx';
+import DefaultNode from '@/components/DefaultNode.jsx';
+import RootNode from '@/components/RootNode.jsx';
 
 const initialNodes = [
     {
         id: '1',
-        type: 'customNode',
-        position: { x: 100, y: 100 },
-        data: { label: 'First Custom Node' },
+        type: 'rootNode',
+        position: { x: 150, y: 0 },
+        data: {
+            name: 'First',
+            title: 'Feldman',
+            avatar: 'https://i.pravatar.cc/100?img=68'
+        }
+    },
+    {
+        id: '2',
+        type: 'defaultNode',
+        position: { x: 0, y: 100 },
+        data: {
+            name: 'Richard',
+            title: 'Second',
+            avatar: 'https://i.pravatar.cc/100?img=65'
+        }
+    },
+    {
+        id: '3',
+        type: 'defaultNode',
+        position: { x: 300, y: 100 },
+        data: {
+            name: 'Richard',
+            title: 'Third',
+        }
     },
 ];
 
 const initialEdges = [];
 
 const nodeTypes = {
-    customNode: CustomNode,
+    rootNode: RootNode,
+    defaultNode: DefaultNode,
 };
 
 const NodeCanvasPage = () => {
