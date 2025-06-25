@@ -2,7 +2,12 @@ import CoreNode from './CoreNode';
 
 const DefaultNode = ({ data, selected }) => {
     return (
-        <CoreNode data={data} selected={selected}>
+        <CoreNode
+            data={data}
+            selected={selected}
+            topHandle={true}
+            bottomHandle={true}
+        >
             <div className="flex items-center gap-3">
                 <img
                     src={data.avatar || "https://i.pravatar.cc/100?img=62"}
