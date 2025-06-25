@@ -19,6 +19,30 @@ const nodeTypes = {
     rootNode: RootNode,
 };
 
+const colorHexCodes = [
+    "#FFFFFF", // White
+    "#000000", // Black
+    "#FF0000", // Red
+    "#00FF00", // Green
+    "#0000FF", // Blue
+    "#FFFF00", // Yellow
+    "#00FFFF", // Cyan / Aqua
+    "#FF00FF", // Magenta / Fuchsia
+    "#FFA500", // Orange
+    "#800080", // Purple
+    "#FFC0CB", // Pink
+    "#A52A2A", // Brown
+    "#808080", // Gray
+    "#D3D3D3", // Light Gray
+    "#A9A9A9", // Dark Gray
+    "#000080", // Navy
+    "#008080", // Teal
+    "#808000", // Olive
+    "#800000", // Maroon
+    "#FFD700"  // Gold
+];
+
+
 const FlowCanvas = ({
     nodes,
     edges,
@@ -43,9 +67,14 @@ const FlowCanvas = ({
 
     const onConnect = useCallback(
         (params) =>
-            setEdges((eds) =>
-                addEdge({ ...params, style: { stroke: '#aaa', strokeWidth: 2 } }, eds)
-            ),
+            setEdges((eds) => {
+                return addEdge({
+                    ...params, style: {
+                        stroke: getRandomColor(),
+                        strokeWidth: 2
+                    }
+                }, eds)
+            }),
         []
     );
 
@@ -56,14 +85,18 @@ const FlowCanvas = ({
         setShowNodePicker(true);
     };
 
+    const getRandomColor = () => {
+        const randomIndex = Math.floor(Math.random() * colorHexCodes.length);
+        return colorHexCodes[randomIndex];
+    };
+
     const displayedEdges = useMemo(() => {
         return edges.map((edge) => {
-            const isConnected =
-                edge.source === selectedNodeId || edge.target === selectedNodeId;
+            const isConnected = edge.source === selectedNodeId || edge.target === selectedNodeId;
             return {
                 ...edge,
                 style: {
-                    stroke: isConnected ? '#6366f1' : '#aaa',
+                    stroke: isConnected ? '#6366f1' : edge.style.stroke,
                     strokeWidth: isConnected ? 3 : 2,
                 },
             };
