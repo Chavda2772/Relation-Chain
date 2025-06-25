@@ -1,8 +1,8 @@
-import CoreNode from './CoreNode';
+import BaseNode from './BaseNode';
 
-const DefaultNode = ({ data, selected }) => {
+const ChildNode = ({ data, selected }) => {
     return (
-        <CoreNode
+        <BaseNode
             data={data}
             selected={selected}
             topHandle={true}
@@ -23,8 +23,8 @@ const DefaultNode = ({ data, selected }) => {
                     </div>
                 </div>
             </div>
-        </CoreNode >
+        </BaseNode >
     );
 };
 
-export default DefaultNode;
+export default ChildNode;

@@ -7,15 +7,17 @@ import '@xyflow/react/dist/style.css';
 
 // Components
 import FlowCanvas from './FlowCanvas'
-import DefaultNode from '@/components/DefaultNode';
-import RootNode from '@/components/RootNode';
+import ParentNode from '@/components/ParentNode';
+import ChildNode from '@/components/ChildNode';
+import SpouseNode from '@/components/SpouseNode';
 
 // Utils
 import { camelCaseToLabel } from '@/utils/commonFunction';
 
 const nodeTypes = {
-    defaultNode: DefaultNode,
-    rootNode: RootNode,
+    parentNode: ParentNode,
+    childNode: ChildNode,
+    spouseNode: SpouseNode,
 };
 
 const NodeCanvasPage = () => {

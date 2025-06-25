@@ -1,20 +1,19 @@
-import CoreNode from './CoreNode';
+import BaseNode from './BaseNode';
 
-const RootNode = ({ data, selected }) => {
+const SpouseNode = ({ data, selected }) => {
     return (
-        <CoreNode
+        <BaseNode
             data={data}
-            bottomHandle={true}
             selected={selected}
+            leftHandle={true}
+            rightHandle={true}
         >
             <div className="flex items-center gap-3">
-                {data.avatar && (
-                    <img
-                        src={data.avatar}
-                        alt="avatar"
-                        className="w-10 h-10 rounded-full object-cover"
-                    />
-                )}
+                <img
+                    src={data.avatar || "https://i.pravatar.cc/100?img=62"}
+                    alt="avatar"
+                    className="w-10 h-10 rounded-full object-cover"
+                />
                 <div>
                     <div className="font-semibold text-gray-800 text-sm">
                         {data.name || 'Unnamed'}
@@ -24,8 +23,8 @@ const RootNode = ({ data, selected }) => {
                     </div>
                 </div>
             </div>
-        </CoreNode>
+        </BaseNode >
     );
 };
 
-export default RootNode;
+export default SpouseNode;

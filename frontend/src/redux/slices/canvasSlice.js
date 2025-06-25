@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialNodes = [
     {
         id: '1',
-        type: 'rootNode',
+        type: 'parentNode',
         position: { x: 300, y: 0 },
         data: {
             name: 'Feldman',
@@ -13,7 +13,7 @@ const initialNodes = [
     },
     {
         id: '2',
-        type: 'defaultNode',
+        type: 'childNode',
         position: { x: 0, y: 200 },
         data: {
             name: 'Richard',
@@ -23,7 +23,7 @@ const initialNodes = [
     },
     {
         id: '3',
-        type: 'defaultNode',
+        type: 'childNode',
         position: { x: 300, y: 200 },
         data: {
             name: 'Emma',
@@ -32,7 +32,7 @@ const initialNodes = [
     },
     {
         id: '4',
-        type: 'defaultNode',
+        type: 'childNode',
         position: { x: 600, y: 200 },
         data: {
             name: 'Lucas',
@@ -41,7 +41,7 @@ const initialNodes = [
     },
     {
         id: '5',
-        type: 'defaultNode',
+        type: 'childNode',
         position: { x: 0, y: 400 },
         data: {
             name: 'Richard',
@@ -51,7 +51,7 @@ const initialNodes = [
     },
     {
         id: '6',
-        type: 'defaultNode',
+        type: 'childNode',
         position: { x: 300, y: 400 },
         data: {
             name: 'Emma',
@@ -61,7 +61,7 @@ const initialNodes = [
     },
     {
         id: '7',
-        type: 'defaultNode',
+        type: 'childNode',
         position: { x: 600, y: 400 },
         data: {
             name: 'Lucas',
