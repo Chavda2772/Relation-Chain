@@ -70,9 +70,22 @@ const FlowCanvas = ({
         });
     }, [edges, selectedNodeId]);
 
+    const onDeleteNode = (id) => {
+        setNodes((nds) => nds.filter((n) => n.id !== id));
+        setEdges((eds) => eds.filter((e) => e.source !== id && e.target !== id));
+        setSelectedNodeId(null);
+    };
+
     return (
         <ReactFlow
-            nodes={nodes}
+            nodes={nodes.map((node) => ({
+                ...node,
+                data: {
+                    ...node.data,
+                    id: node.id,
+                    onDelete: onDeleteNode,
+                },
+            }))}
             edges={displayedEdges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}

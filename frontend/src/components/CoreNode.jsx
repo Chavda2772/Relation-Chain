@@ -1,6 +1,7 @@
 import { Handle, Position } from '@xyflow/react';
 
 const CoreNode = ({
+    data,
     topHandle = true,
     bottomHandle = true,
     selected,
@@ -11,6 +12,20 @@ const CoreNode = ({
             className={`bg-white rounded-lg shadow-md px-4 py-2 w-56 text-left relative transition-all duration-200 ring-1 hover:scale-110
             ${selected ? 'ring-purple-400 shadow-lg' : 'ring-purple-200'}`}
         >
+            {/* Delete Action Bar */}
+            {selected && (
+                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-10">
+                    <button
+                        onClick={() => {
+                            data?.onDelete(data?.id)
+                        }}
+                        className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded shadow"
+                    >
+                        Delete
+                    </button>
+                </div>
+            )}
+
             {/* Node Content */}
             {children}
 
