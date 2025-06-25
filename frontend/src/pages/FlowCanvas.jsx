@@ -15,27 +15,10 @@ import {
     applyNodeChanges,
     applyEdgeChanges,
     addEdge,
+    ConnectionLineType
 } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
-
-const colorHexCodes = [
-    "#FF0000", // Red
-    "#00FF00", // Green
-    "#0000FF", // Blue
-    "#FFFF00", // Yellow
-    "#00FFFF", // Cyan / Aqua
-    "#FF00FF", // Magenta / Fuchsia
-    "#FFA500", // Orange
-    "#800080", // Purple
-    "#FFC0CB", // Pink
-    "#A52A2A", // Brown
-    "#000080", // Navy
-    "#008080", // Teal
-    "#808000", // Olive
-    "#800000", // Maroon
-    "#FFD700"  // Gold
-];
 
 const FlowCanvas = ({ nodeTypes, setClickPosition, setShowNodePicker }) => {
     const dispatch = useDispatch();
@@ -44,11 +27,6 @@ const FlowCanvas = ({ nodeTypes, setClickPosition, setShowNodePicker }) => {
     const nodes = useSelector((state) => state.canvas.nodes);
     const edges = useSelector((state) => state.canvas.edges);
     const selectedNodeId = useSelector((state) => state.canvas.selectedNodeId);
-
-    const getRandomColor = () => {
-        const randomIndex = Math.floor(Math.random() * colorHexCodes.length);
-        return colorHexCodes[randomIndex];
-    };
 
     const onNodesChange = useCallback(
         (changes) => {
@@ -69,7 +47,8 @@ const FlowCanvas = ({ nodeTypes, setClickPosition, setShowNodePicker }) => {
             const newEdges = addEdge(
                 {
                     ...params,
-                    style: { stroke: getRandomColor(), strokeWidth: 2 }
+                    type: ConnectionLineType.Step,
+                    style: { stroke: '#000000', strokeWidth: 2 }
                 },
                 edges
             );
