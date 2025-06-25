@@ -1,5 +1,5 @@
 // Packages
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ReactFlowProvider } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -100,6 +100,24 @@ const NodeCanvasPage = () => {
         setNodes((prev) => [...prev, newNode]);
         setShowNodePicker(false);
     };
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Delete' && selectedNodeId) {
+                // Remove selected node
+                setNodes((nds) => nds.filter((node) => node.id !== selectedNodeId));
+
+                // Remove connected edges
+                setEdges((eds) => eds.filter((edge) => edge.source !== selectedNodeId && edge.target !== selectedNodeId));
+
+                // Clear selection
+                setSelectedNodeId(null);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [selectedNodeId, setNodes, setEdges]);
 
     return (
         <>

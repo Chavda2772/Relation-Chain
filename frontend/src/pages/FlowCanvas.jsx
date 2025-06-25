@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import {
     ReactFlow,
-    ReactFlowProvider,
     useReactFlow,
     Controls,
     Background,
@@ -50,15 +49,12 @@ const FlowCanvas = ({
         []
     );
 
-    const onPaneContextMenu = useCallback(
-        (e) => {
-            e.preventDefault();
-            const flowPos = screenToFlowPosition({ x: e.clientX, y: e.clientY });
-            setClickPosition(flowPos);
-            setShowNodePicker(true);
-        },
-        [screenToFlowPosition]
-    );
+    const onPaneContextMenu = (e) => {
+        e.preventDefault();
+        const flowPos = screenToFlowPosition({ x: e.clientX, y: e.clientY });
+        setClickPosition(flowPos);
+        setShowNodePicker(true);
+    };
 
     const displayedEdges = useMemo(() => {
         return edges.map((edge) => {
