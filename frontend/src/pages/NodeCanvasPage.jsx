@@ -59,7 +59,6 @@ const NodeCanvasPage = () => {
                 onConnect={onConnect}
                 nodeTypes={nodeTypes}
                 fitView
-                panOnScroll
                 zoomOnScroll
             >
                 <Background color="#333" gap={20} />
