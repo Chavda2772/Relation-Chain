@@ -17,7 +17,7 @@ const initialNodes = [
     {
         id: '1',
         type: 'rootNode',
-        position: { x: 150, y: 0 },
+        position: { x: 300, y: 0 },
         data: {
             name: 'First',
             title: 'Feldman',
@@ -27,7 +27,7 @@ const initialNodes = [
     {
         id: '2',
         type: 'defaultNode',
-        position: { x: 0, y: 100 },
+        position: { x: 0, y: 200 },
         data: {
             name: 'Richard',
             title: 'Second',
@@ -37,10 +37,19 @@ const initialNodes = [
     {
         id: '3',
         type: 'defaultNode',
-        position: { x: 300, y: 100 },
+        position: { x: 300, y: 200 },
         data: {
             name: 'Richard',
             title: 'Third',
+        }
+    },
+    {
+        id: '4',
+        type: 'defaultNode',
+        position: { x: 600, y: 200 },
+        data: {
+            name: 'Richard',
+            title: 'Fourth',
         }
     },
 ];
