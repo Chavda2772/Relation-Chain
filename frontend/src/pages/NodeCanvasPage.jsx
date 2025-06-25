@@ -1,18 +1,10 @@
-// @/pages/NodeCanvasPage.jsx
-
-import { useCallback, useMemo, useState } from 'react';
-import {
-    ReactFlow,
-    Controls,
-    Background,
-    applyNodeChanges,
-    applyEdgeChanges,
-    addEdge,
-} from '@xyflow/react';
+// Packages
+import { useState } from 'react';
+import { ReactFlowProvider } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
-import DefaultNode from '@/components/DefaultNode';
-import RootNode from '@/components/RootNode';
+// Components
+import FlowCanvas from './FlowCanvas'
 
 const initialNodes = [
     {
@@ -87,65 +79,72 @@ const initialNodes = [
 
 const initialEdges = [];
 
-const nodeTypes = {
-    defaultNode: DefaultNode,
-    rootNode: RootNode,
-};
-
 const NodeCanvasPage = () => {
     const [nodes, setNodes] = useState(initialNodes);
     const [edges, setEdges] = useState(initialEdges);
     const [selectedNodeId, setSelectedNodeId] = useState(null);
+    const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
+    const [showNodePicker, setShowNodePicker] = useState(false);
 
-    const onNodesChange = useCallback(
-        (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-        []
-    );
-
-    const onEdgesChange = useCallback(
-        (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-        []
-    );
-
-    const onConnect = useCallback(
-        (params) =>
-            setEdges((eds) =>
-                addEdge({ ...params, style: { stroke: '#aaa', strokeWidth: 2 } }, eds)
-            ),
-        []
-    );
-
-    const displayedEdges = useMemo(() => {
-        return edges.map((edge) => {
-            const isConnected =
-                edge.source === selectedNodeId || edge.target === selectedNodeId;
-            return {
-                ...edge,
-                style: {
-                    stroke: isConnected ? '#6366f1' : '#aaa',
-                    strokeWidth: isConnected ? 3 : 2,
-                },
-            };
-        });
-    }, [edges, selectedNodeId]);
+    const handleAddNode = (type) => {
+        const newNode = {
+            id: `${Date.now()}`,
+            type: type,
+            position: clickPosition,
+            data: {
+                name: `${type === 'rootNode' ? 'Root' : 'Default'} Node`,
+                title: '',
+                avatar: type === 'rootNode' ? 'https://i.pravatar.cc/100?img=3' : ''
+            }
+        };
+        setNodes((prev) => [...prev, newNode]);
+        setShowNodePicker(false);
+    };
 
     return (
-        <div className="w-screen h-screen">
-            <ReactFlow
-                nodes={nodes}
-                edges={displayedEdges}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
-                onConnect={onConnect}
-                onNodeClick={(e, node) => setSelectedNodeId(node.id)}
-                onPaneClick={() => setSelectedNodeId(null)}
-                nodeTypes={nodeTypes}
-                fitView
-            >
-                <Background color="#333" gap={20} />
-                <Controls />
-            </ReactFlow>
-        </div>
+        <>
+            <div className="w-screen h-screen">
+                <ReactFlowProvider>
+                    <FlowCanvas
+                        nodes={nodes}
+                        edges={edges}
+                        setNodes={setNodes}
+                        setEdges={setEdges}
+                        setSelectedNodeId={setSelectedNodeId}
+                        clickPosition={clickPosition}
+                        setClickPosition={setClickPosition}
+                        setShowNodePicker={setShowNodePicker}
+                        selectedNodeId={selectedNodeId}
+                    />
+                </ReactFlowProvider>
+            </div>
+
+            {showNodePicker && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50">
+                    <div className="bg-white rounded-lg p-4 shadow-lg w-64 space-y-2">
+                        <h3 className="text-lg font-semibold mb-2">Choose Node Type</h3>
+                        <button
+                            className="w-full bg-purple-100 hover:bg-purple-200 text-purple-800 font-medium py-2 rounded"
+                            onClick={() => handleAddNode('rootNode')}
+                        >
+                            ➕ Root Node
+                        </button>
+                        <button
+                            className="w-full bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium py-2 rounded"
+                            onClick={() => handleAddNode('defaultNode')}
+                        >
+                            ➕ Default Node
+                        </button>
+                        <button
+                            className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 rounded"
+                            onClick={() => setShowNodePicker(false)}
+                        >
+                            ❌ Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
+        </>
     );
 };
 
