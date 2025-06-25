@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react';
+// @/pages/NodeCanvasPage.jsx
+import { useState, useCallback } from 'react';
 import {
     ReactFlow,
     Controls,
@@ -9,67 +10,63 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
-// Initial node and edge data
+import CustomNode from '@/components/CustomNode.jsx';
+
 const initialNodes = [
     {
         id: '1',
-        type: 'input',
-        position: { x: 100, y: 0 },
-        data: { label: 'Hello' },
-    },
-    {
-        id: '2',
-        position: { x: 0, y: 100 },
-        data: { label: 'World' },
-    },
-    {
-        id: '3',
-        position: { x: 200, y: 100 },
-        data: { label: 'World' },
+        type: 'customNode',
+        position: { x: 100, y: 100 },
+        data: { label: 'First Custom Node' },
     },
 ];
 
 const initialEdges = [];
 
-function NodeCanvasPage() {
+const nodeTypes = {
+    customNode: CustomNode,
+};
+
+const NodeCanvasPage = () => {
     const [nodes, setNodes] = useState(initialNodes);
     const [edges, setEdges] = useState(initialEdges);
 
-    // Update nodes when user drags/resizes/etc.
     const onNodesChange = useCallback(
         (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
         []
     );
 
-    // Update edges on change
     const onEdgesChange = useCallback(
         (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
         []
     );
 
-    // Handle connection between nodes
     const onConnect = useCallback(
-        (params) => setEdges((eds) => addEdge({ ...params, style: { stroke: '#999' } }, eds)),
+        (params) =>
+            setEdges((eds) =>
+                addEdge({ ...params, style: { stroke: '#aaa', strokeWidth: 2 } }, eds)
+            ),
         []
     );
 
     return (
-        <div style={{ width: '100vw', height: '100vh', background: '#ffffff' }}>
+        <div style={{ width: '100vw', height: '100vh' }}>
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
+                nodeTypes={nodeTypes}
                 fitView
                 panOnScroll
                 zoomOnScroll
             >
-                <Background color="#333" />
+                <Background color="#333" gap={20} />
                 <Controls />
             </ReactFlow>
         </div>
     );
-}
+};
 
 export default NodeCanvasPage;
