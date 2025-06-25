@@ -22,8 +22,14 @@ const RootNode = ({ data }) => {
             <Handle
                 type="source"
                 position={Position.Bottom}
-                style={{ background: '#27ae60' }}
+                className="!bg-green-400 !border-3 !border-green-200 !w-3 !h-3 !rounded-full"
+                style={{
+                    top: '100%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                }}
             />
+
         </div>
     );
 };

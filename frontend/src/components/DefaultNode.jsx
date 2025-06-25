@@ -6,8 +6,13 @@ const DefaultNode = ({ data }) => {
             <Handle
                 type="target"
                 position={Position.Top}
-                style={{ background: '#56ccf2' }}
-            />
+                className="!bg-sky-400 !border-4 !border-sky-200 !w-4 !h-4 !rounded-full"
+                style={{
+                    top: 0,
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                }}
+            />  
 
             {/* Avatar and Text Row */}
             <div className="flex items-center gap-3">
@@ -28,7 +33,12 @@ const DefaultNode = ({ data }) => {
             <Handle
                 type="source"
                 position={Position.Bottom}
-                style={{ background: '#27ae60' }}
+                className="!bg-green-400 !border-3 !border-green-200 !w-3 !h-3 !rounded-full"
+                style={{
+                    top: '100%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                }}
             />
         </div>
     );
