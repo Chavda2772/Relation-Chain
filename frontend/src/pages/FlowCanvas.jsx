@@ -1,4 +1,11 @@
 import { useCallback, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    setSelectedNodeId,
+    setNodesAction,
+    setEdgesAction,
+} from '@/redux/slices/canvasSlice';
+
 import {
     ReactFlow,
     useReactFlow,
@@ -9,8 +16,8 @@ import {
     applyEdgeChanges,
     addEdge,
 } from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
 
+import '@xyflow/react/dist/style.css';
 import DefaultNode from '@/components/DefaultNode';
 import RootNode from '@/components/RootNode';
 
@@ -42,40 +49,45 @@ const colorHexCodes = [
     "#FFD700"  // Gold
 ];
 
-
-const FlowCanvas = ({
-    nodes,
-    edges,
-    setNodes,
-    setEdges,
-    setSelectedNodeId,
-    setClickPosition,
-    setShowNodePicker,
-    selectedNodeId,
-}) => {
+const FlowCanvas = ({ setClickPosition, setShowNodePicker }) => {
+    const dispatch = useDispatch();
     const { screenToFlowPosition } = useReactFlow();
 
+    const nodes = useSelector((state) => state.canvas.nodes);
+    const edges = useSelector((state) => state.canvas.edges);
+    const selectedNodeId = useSelector((state) => state.canvas.selectedNodeId);
+
+    const getRandomColor = () => {
+        const randomIndex = Math.floor(Math.random() * colorHexCodes.length);
+        return colorHexCodes[randomIndex];
+    };
+
     const onNodesChange = useCallback(
-        (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-        []
+        (changes) => {
+            dispatch(setNodesAction(applyNodeChanges(changes, nodes)));
+        },
+        [dispatch, nodes]
     );
 
     const onEdgesChange = useCallback(
-        (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-        []
+        (changes) => {
+            dispatch(setEdgesAction(applyEdgeChanges(changes, edges)));
+        },
+        [dispatch, edges]
     );
 
     const onConnect = useCallback(
-        (params) =>
-            setEdges((eds) => {
-                return addEdge({
-                    ...params, style: {
-                        stroke: getRandomColor(),
-                        strokeWidth: 2
-                    }
-                }, eds)
-            }),
-        []
+        (params) => {
+            const newEdges = addEdge(
+                {
+                    ...params,
+                    style: { stroke: getRandomColor(), strokeWidth: 2 }
+                },
+                edges
+            );
+            dispatch(setEdgesAction(newEdges));
+        },
+        [dispatch, edges]
     );
 
     const onPaneContextMenu = (e) => {
@@ -85,10 +97,6 @@ const FlowCanvas = ({
         setShowNodePicker(true);
     };
 
-    const getRandomColor = () => {
-        const randomIndex = Math.floor(Math.random() * colorHexCodes.length);
-        return colorHexCodes[randomIndex];
-    };
 
     const displayedEdges = useMemo(() => {
         return edges.map((edge) => {
@@ -96,18 +104,12 @@ const FlowCanvas = ({
             return {
                 ...edge,
                 style: {
-                    stroke: isConnected ? '#6366f1' : edge.style.stroke,
+                    stroke: isConnected ? '#6366f1' : (edge.style?.stroke || '#aaa'),
                     strokeWidth: isConnected ? 3 : 2,
                 },
             };
         });
     }, [edges, selectedNodeId]);
-
-    const onDeleteNode = (id) => {
-        setNodes((nds) => nds.filter((n) => n.id !== id));
-        setEdges((eds) => eds.filter((e) => e.source !== id && e.target !== id));
-        setSelectedNodeId(null);
-    };
 
     return (
         <ReactFlow
@@ -116,15 +118,14 @@ const FlowCanvas = ({
                 data: {
                     ...node.data,
                     id: node.id,
-                    onDelete: onDeleteNode,
                 },
             }))}
             edges={displayedEdges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
-            onNodeClick={(e, node) => setSelectedNodeId(node.id)}
-            onPaneClick={() => setSelectedNodeId(null)}
+            onNodeClick={(e, node) => dispatch(setSelectedNodeId(node.id))}
+            onPaneClick={() => dispatch(setSelectedNodeId(null))}
             onPaneContextMenu={onPaneContextMenu}
             nodeTypes={nodeTypes}
             fitView

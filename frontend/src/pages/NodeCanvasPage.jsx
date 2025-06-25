@@ -1,90 +1,21 @@
 // Packages
 import { useState, useEffect } from 'react';
 import { ReactFlowProvider } from '@xyflow/react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setSelectedNodeId, setNodesAction, deleteNodeById } from '@/redux/slices/canvasSlice';
 import '@xyflow/react/dist/style.css';
 
 // Components
 import FlowCanvas from './FlowCanvas'
 
-const initialNodes = [
-    {
-        id: '1',
-        type: 'rootNode',
-        position: { x: 300, y: 0 },
-        data: {
-            name: 'Feldman',
-            title: 'First',
-            avatar: 'https://i.pravatar.cc/100?img=68',
-        },
-    },
-    {
-        id: '2',
-        type: 'defaultNode',
-        position: { x: 0, y: 200 },
-        data: {
-            name: 'Richard',
-            title: 'Second',
-            avatar: 'https://i.pravatar.cc/100?img=65',
-        },
-    },
-    {
-        id: '3',
-        type: 'defaultNode',
-        position: { x: 300, y: 200 },
-        data: {
-            name: 'Emma',
-            title: 'Third',
-        },
-    },
-    {
-        id: '4',
-        type: 'defaultNode',
-        position: { x: 600, y: 200 },
-        data: {
-            name: 'Lucas',
-            title: 'Fourth',
-        },
-    },
-    {
-        id: '5',
-        type: 'defaultNode',
-        position: { x: 0, y: 400 },
-        data: {
-            name: 'Richard',
-            title: 'Five',
-            avatar: 'https://i.pravatar.cc/100?img=64',
-        },
-    },
-    {
-        id: '6',
-        type: 'defaultNode',
-        position: { x: 300, y: 400 },
-        data: {
-            name: 'Emma',
-            title: 'Six',
-            avatar: 'https://i.pravatar.cc/100?img=63',
-        },
-    },
-    {
-        id: '7',
-        type: 'defaultNode',
-        position: { x: 600, y: 400 },
-        data: {
-            name: 'Lucas',
-            title: 'Seven',
-            avatar: 'https://i.pravatar.cc/100?img=60',
-        },
-    },
-];
-
-const initialEdges = [];
-
 const NodeCanvasPage = () => {
-    const [nodes, setNodes] = useState(initialNodes);
-    const [edges, setEdges] = useState(initialEdges);
-    const [selectedNodeId, setSelectedNodeId] = useState(null);
     const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
     const [showNodePicker, setShowNodePicker] = useState(false);
+
+    const nodes = useSelector((state) => state.canvas.nodes);
+    const edges = useSelector((state) => state.canvas.edges);
+    const selectedNodeId = useSelector((state) => state.canvas.selectedNodeId);
+    const dispatch = useDispatch();
 
     const handleAddNode = (type) => {
         const newNode = {
@@ -97,7 +28,8 @@ const NodeCanvasPage = () => {
                 avatar: type === 'rootNode' ? 'https://i.pravatar.cc/100?img=3' : ''
             }
         };
-        setNodes((prev) => [...prev, newNode]);
+        let nodes = [...nodes, newNode];
+        dispatch(setNodesAction(nodes));
         setShowNodePicker(false);
     };
 
@@ -105,10 +37,7 @@ const NodeCanvasPage = () => {
         const handleKeyDown = (e) => {
             if (e.key === 'Delete' && selectedNodeId) {
                 // Remove selected node
-                setNodes((nds) => nds.filter((node) => node.id !== selectedNodeId));
-
-                // Remove connected edges
-                setEdges((eds) => eds.filter((edge) => edge.source !== selectedNodeId && edge.target !== selectedNodeId));
+                dispatch(deleteNodeById(selectedNodeId));
 
                 // Clear selection
                 setSelectedNodeId(null);
@@ -117,7 +46,7 @@ const NodeCanvasPage = () => {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [selectedNodeId, setNodes, setEdges]);
+    }, [selectedNodeId, dispatch]);
 
     return (
         <>
@@ -126,8 +55,6 @@ const NodeCanvasPage = () => {
                     <FlowCanvas
                         nodes={nodes}
                         edges={edges}
-                        setNodes={setNodes}
-                        setEdges={setEdges}
                         setSelectedNodeId={setSelectedNodeId}
                         clickPosition={clickPosition}
                         setClickPosition={setClickPosition}
