@@ -64,6 +64,7 @@ const CoreNode = ({
             {/* Handles */}
             {topHandle && (
                 <Handle
+                    id="vertical"
                     type="target"
                     position={Position.Top}
                     className="!bg-sky-400 !w-3 !h-3 !rounded-full"
@@ -72,6 +73,7 @@ const CoreNode = ({
             )}
             {bottomHandle && (
                 <Handle
+                    id="vertical"
                     type="source"
                     position={Position.Bottom}
                     className="!bg-purple-500 !w-3 !h-3 !rounded-full"
@@ -80,6 +82,7 @@ const CoreNode = ({
             )}
             {leftHandle && (
                 <Handle
+                    id="horizontal"
                     type="target"
                     position={Position.Left}
                     className="!bg-orange-500 !w-3 !h-3 !rounded-full"
@@ -88,6 +91,7 @@ const CoreNode = ({
             )}
             {rightHandle && (
                 <Handle
+                    id="horizontal"
                     type="source"
                     position={Position.Right}
                     className="!bg-lime-500 !w-3 !h-3 !rounded-full"
