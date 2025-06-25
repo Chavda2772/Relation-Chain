@@ -2,11 +2,21 @@
 import { useState, useEffect } from 'react';
 import { ReactFlowProvider } from '@xyflow/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setSelectedNodeId, setNodesAction, deleteNodeById } from '@/redux/slices/canvasSlice';
+import { setSelectedNodeId, addNode, deleteNodeById } from '@/redux/slices/canvasSlice';
 import '@xyflow/react/dist/style.css';
 
 // Components
 import FlowCanvas from './FlowCanvas'
+import DefaultNode from '@/components/DefaultNode';
+import RootNode from '@/components/RootNode';
+
+// Utils
+import { camelCaseToLabel } from '@/utils/commonFunction';
+
+const nodeTypes = {
+    defaultNode: DefaultNode,
+    rootNode: RootNode,
+};
 
 const NodeCanvasPage = () => {
     const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
@@ -28,8 +38,7 @@ const NodeCanvasPage = () => {
                 avatar: type === 'rootNode' ? 'https://i.pravatar.cc/100?img=3' : ''
             }
         };
-        let nodes = [...nodes, newNode];
-        dispatch(setNodesAction(nodes));
+        dispatch(addNode(newNode));
         setShowNodePicker(false);
     };
 
@@ -55,6 +64,7 @@ const NodeCanvasPage = () => {
                     <FlowCanvas
                         nodes={nodes}
                         edges={edges}
+                        nodeTypes={nodeTypes}
                         setSelectedNodeId={setSelectedNodeId}
                         clickPosition={clickPosition}
                         setClickPosition={setClickPosition}
@@ -68,26 +78,25 @@ const NodeCanvasPage = () => {
                 <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50">
                     <div className="bg-white rounded-lg p-4 shadow-lg w-64 space-y-2">
                         <h3 className="text-lg font-semibold mb-2">Choose Node Type</h3>
-                        <button
-                            className="w-full bg-purple-100 hover:bg-purple-200 text-purple-800 font-medium py-2 rounded"
-                            onClick={() => handleAddNode('rootNode')}
-                        >
-                            ➕ Root Node
-                        </button>
-                        <button
-                            className="w-full bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium py-2 rounded"
-                            onClick={() => handleAddNode('defaultNode')}
-                        >
-                            ➕ Default Node
-                        </button>
+                        {/* Iteration through types of Nodes */}
+                        {Object.keys(nodeTypes).map((nodeType) => {
+                            return (
+                                <button
+                                    className="w-full bg-purple-100 hover:bg-purple-200 text-purple-800 font-medium py-2 rounded"
+                                    onClick={() => handleAddNode(nodeType)}
+                                >
+                                    {camelCaseToLabel(nodeType)}
+                                </button>
+                            )
+                        })}
                         <button
                             className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 rounded"
                             onClick={() => setShowNodePicker(false)}
                         >
-                            ❌ Cancel
+                            Cancel
                         </button>
                     </div>
-                </div>
+                </div >
             )}
         </>
     );

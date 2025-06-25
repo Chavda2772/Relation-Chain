@@ -90,6 +90,10 @@ const canvasSlice = createSlice({
         setSelectedNodeId: (state, action) => {
             state.selectedNodeId = action.payload;
         },
+        addNode: (state, action) => {
+            const node = action.payload;
+            state.nodes = [...state.nodes, node]
+        },
         deleteNodeById: (state, action) => {
             const nodeId = action.payload;
             state.nodes = state.nodes.filter(node => node.id !== nodeId);
@@ -107,6 +111,7 @@ export const {
     setNodesAction,
     setEdgesAction,
     setSelectedNodeId,
+    addNode,
     deleteNodeById
 } = canvasSlice.actions;
 

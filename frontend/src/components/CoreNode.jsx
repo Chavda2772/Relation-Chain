@@ -1,3 +1,4 @@
+import { Trash2 } from 'lucide-react';
 import { Handle, Position } from '@xyflow/react';
 import { useDispatch } from 'react-redux';
 import { deleteNodeById } from '@/redux/slices/canvasSlice';
@@ -25,9 +26,10 @@ const CoreNode = ({
                 <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-10">
                     <button
                         onClick={handleDelete}
-                        className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded shadow"
+                        className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 flex gap-1 rounded shadow"
                     >
-                        Delete
+                        <Trash2 size={16} />
+                        <span>Delete</span>
                     </button>
                 </div>
             )}
