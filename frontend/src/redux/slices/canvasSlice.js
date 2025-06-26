@@ -32,7 +32,7 @@ const initialNodes = [
     },
     {
         id: '4',
-        type: 'childNode',
+        type: 'testNode',
         position: { x: 600, y: 200 },
         data: {
             name: 'Lucas',

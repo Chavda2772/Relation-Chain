@@ -10,6 +10,7 @@ import FlowCanvas from './FlowCanvas'
 import ParentNode from '@/components/ParentNode';
 import ChildNode from '@/components/ChildNode';
 import SpouseNode from '@/components/SpouseNode';
+import TestNode from '@/components/TestNode';
 
 // Utils
 import { camelCaseToLabel } from '@/utils/commonFunction';
@@ -18,6 +19,7 @@ const nodeTypes = {
     parentNode: ParentNode,
     childNode: ChildNode,
     spouseNode: SpouseNode,
+    testNode: TestNode,
 };
 
 const NodeCanvasPage = () => {
