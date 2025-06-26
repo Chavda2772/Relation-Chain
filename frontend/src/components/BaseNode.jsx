@@ -28,12 +28,13 @@ const CoreNode = ({
 
     return (
         <div
-            className={`bg-white rounded-lg shadow-md px-4 py-2 w-56 text-left relative transition-all duration-200 ring-1 hover:scale-110
-            ${selected ? 'ring-purple-400 shadow-lg' : 'ring-purple-200'}`}
+            className={`relative w-32 bg-white rounded-2xl border-2 
+                       ${selected ? 'border-red-500 shadow-lg scale-105' : 'border-red-400'} 
+                       transition-transform duration-200 text-center pt-10 pb-2`}
         >
             {/* Action Bar */}
             {selected && (
-                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-10 flex gap-1">
+                <div className="absolute -top-23 left-1/2 transform -translate-x-1/2 z-10 flex gap-1">
                     <button
                         onClick={handleProfileClick}
                         className="bg-green-500 hover:bg-green-600 text-white text-xs px-2 py-1 flex gap-1 rounded shadow"
@@ -62,22 +63,24 @@ const CoreNode = ({
             {children}
 
             {/* Handles */}
-            {topHandle && (
-                <Handle
-                    id="vertical"
-                    type="target"
-                    position={Position.Top}
-                    className="!bg-sky-400 !w-3 !h-3 !rounded-full"
-                    style={{ top: 0, left: '50%' }}
-                />
-            )}
+            <div className="absolute -top-14 left-1/2 transform -translate-x-1/2">
+                {topHandle && (
+                    <Handle
+                        id="vertical"
+                        type="target"
+                        position={Position.Top}
+                        className="!bg-orange-500 !w-2 !h-2 !rounded-full"
+                        style={{ top: 0, left: '50%' }}
+                    />
+                )}
+            </div>
             {bottomHandle && (
                 <Handle
                     id="vertical"
                     type="source"
                     position={Position.Bottom}
-                    className="!bg-purple-500 !w-3 !h-3 !rounded-full"
-                    style={{ bottom: 0, left: '50%', transform: 'translate(-50%, 50%)' }}
+                    className="!bg-orange-500 !w-2 !h-2 !rounded-full"
+                    style={{ bottom: 0, left: '50%', transform: 'translate(-50%, 60%)' }}
                 />
             )}
             {leftHandle && (
@@ -85,7 +88,7 @@ const CoreNode = ({
                     id="horizontal"
                     type="target"
                     position={Position.Left}
-                    className="!bg-orange-500 !w-3 !h-3 !rounded-full"
+                    className="!bg-orange-500 !w-2 !h-2 !rounded-full"
                     style={{ top: '50%', left: 0, transform: 'translate(-50%, -50%)' }}
                 />
             )}
@@ -94,7 +97,7 @@ const CoreNode = ({
                     id="horizontal"
                     type="source"
                     position={Position.Right}
-                    className="!bg-lime-500 !w-3 !h-3 !rounded-full"
+                    className="!bg-orange-500 !w-2 !h-2 !rounded-full"
                     style={{ top: '50%', right: 0, transform: 'translate(50%, -50%)' }}
                 />
             )}

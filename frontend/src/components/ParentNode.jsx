@@ -7,22 +7,20 @@ const ParentNode = ({ data, selected }) => {
             bottomHandle={true}
             selected={selected}
         >
-            <div className="flex items-center gap-3">
-                {data.avatar && (
+            {/* Avatar Circle */}
+            <div className="absolute -top-14 left-1/2 transform -translate-x-1/2">
+                <div className="w-24 h-24 rounded-full border-2 border-red-400 bg-white shadow overflow-hidden">
                     <img
-                        src={data.avatar}
+                        src={data.avatar || "https://i.pravatar.cc/100?img=32"}
                         alt="avatar"
-                        className="w-10 h-10 rounded-full object-cover"
+                        className="w-full h-full object-cover rounded-full"
                     />
-                )}
-                <div>
-                    <div className="font-semibold text-gray-800 text-sm">
-                        {data.name || 'Unnamed'}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                        {data.title || 'No title'}
-                    </div>
                 </div>
+            </div>
+
+            {/* Name */}
+            <div className="mt-3 font-medium text-gray-800 text-sm capitalize">
+                {data.name || 'Unnamed'}
             </div>
         </BaseNode>
     );
